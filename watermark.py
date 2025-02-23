@@ -76,6 +76,7 @@ def main(args):
     z_score_list = []
     simcse_list = []
     ppl_list = []
+    human_z_score_list = []
     cos = torch.nn.CosineSimilarity(dim=0, eps=1e-6) # function for SimCSE
 
     # Always use OPT tokenizer to check the length of the tokenized prompt
@@ -88,7 +89,7 @@ def main(args):
     for step, batch in enumerate(loader):
         if step % 5 == 0:
             print(step)
-        # human = batch['baseline_completion']  
+        human = batch['baseline_completion']  
         # # human completion can be used to compute False Positive Rate
 
         input_ids = batch['input_ids'].to(model.device)
@@ -174,7 +175,9 @@ def main(args):
                                         ignore_repeated_bigrams=args.ignore_repeated_bigrams)
                     with autocast():
                         score_dict = watermark_detector.detect(decoded_output_w_wm[idx])
+                        human_score_dict = watermark_detector.detect(human[idx])
                     z_score = score_dict['z_score'].item()
+                    human_z_score = human_score_dict['z_score'].item()
 
                 elif args.scheme == "TS": 
                     watermark_detector = WatermarkDetector(vocab=list(tokenizer.get_vocab().values()),
@@ -188,8 +191,10 @@ def main(args):
                                         ignore_repeated_bigrams=args.ignore_repeated_bigrams)
                     with autocast():
                         score_dict = watermark_detector.detect(decoded_output_w_wm[idx])
+                        human_score_dict = watermark_detector.detect(human[idx])
                     z_score = score_dict['z_score'].item()
-
+                    human_z_score = human_score_dict['z_score'].item()
+            human_z_score_list.append(human_z_score)
             z_score_list.append(z_score)  
             simcse_list.append(cos(embed_wm[idx], embed_no_wm[idx]).item())
 
@@ -200,6 +205,7 @@ def main(args):
                     "no_wm_completion": decoded_output_no_wm[idx], 
                     "gen_completion": decoded_output_w_wm[idx],
                     "z_wm": z_score,
+                    "z_human": human_z_score,
                     "simcse": cos(embed_wm[idx], embed_no_wm[idx]).item(),
                 }
                 with open(f"{args.output_dir}/text_{args.scheme}_{model_short_name}.json_pp", "a") as f:
@@ -235,7 +241,7 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run watermarked huggingface LM generation pipeline")
-    parser.add_argument("--config_file", type=str, default="TS.yaml", help="Path to the configuration file.")
+    parser.add_argument("--config_file", type=str, default="./config/TS.yaml", help="Path to the configuration file.")
     args = parser.parse_args()
 
     with open(args.config_file, 'r') as file:
