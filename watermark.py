@@ -5,8 +5,8 @@ import random
 import numpy as np
 
 ######## HF CACHE (LOAD BEFORE HF PACKAGES) ########
-# os.environ['HF_HOME'] = "/data1/mingjia/cache/huggingface"
-# print(f"Current huggingface cache dir: {os.environ['HF_HOME']}")
+os.environ['HF_HOME'] = "./models"
+print(f"Current huggingface cache dir: {os.environ['HF_HOME']}")
 
 import torch
 from transformers import AutoModel, OPTForCausalLM, AutoTokenizer, LogitsProcessorList

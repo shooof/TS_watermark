@@ -1,7 +1,7 @@
 import os
 import argparse
-# os.environ['HF_HOME'] = "/data1/mingjia/cache/huggingface"
-# print(f"Current huggingface cache dir: {os.environ['HF_HOME']}")
+os.environ['HF_HOME'] = "./models"
+print(f"Current huggingface cache dir: {os.environ['HF_HOME']}")
 
 from functools import partial
 from tqdm import tqdm
@@ -644,7 +644,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--run_name",
         type=str,
-        default=None,
+        default="fp16_training",
         help="The unique name for the run.",
     )
     parser.add_argument(
