@@ -27,7 +27,7 @@ generation:
   sampling_temp: 1.0
   top_k: 50
   generation_seed: null
-  batch_size: 4
+  batch_size: 12
 
 watermark:
   scheme: "KGW" 
