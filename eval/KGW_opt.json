@@ -1,0 +1,18 @@
+{
+    "gamma": 0.2,
+    "delta": 1,
+    "ckpt_path": "",
+    "max_new_tokens": 200,
+    "min_prompt_tokens": 300,
+    "max_input_len": 1000,
+    "use_sampling": true,
+    "sampling_temp": 1.0,
+    "model": "facebook/opt-1.3b",
+    "z": {
+        "avg": 4.342314018130303,
+        "stdev": 1.5584555803873428,
+        "total": 500,
+        "detected": 308
+    },
+    "simcse": 0.7381533203125
+}
