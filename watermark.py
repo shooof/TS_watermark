@@ -208,7 +208,7 @@ def main(args):
                     "z_human": human_z_score,
                     "simcse": cos(embed_wm[idx], embed_no_wm[idx]).item(),
                 }
-                with open(f"{args.output_dir}/text_{args.scheme}_{model_short_name}.json_pp", "a") as f:
+                with open(f"{args.output_dir}/text_{args.scheme}_{model_short_name}_{args.config_file.split('/')[-1]}.json_pp", "a") as f:
                     f.write(json.dumps(dd) + "\n")
     
 
